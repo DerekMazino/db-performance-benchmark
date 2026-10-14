@@ -1,0 +1,50 @@
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.03
+========================================================
+[OPTIMIZACION] Creando indice compuesto de cobertura...
+========================================================
+Elapsed: 00:01:02.74
+Elapsed: 00:00:10.98
+Elapsed: 00:00:00.03
+
+========================================================
+[OPTIMIZACION] Ejecutando consulta sargable con rango...
+========================================================
+
+STATUS	  TOTAL_COUNT TOTAL_AMOUNT
+--------- ----------- ------------
+COMPLETED	12372	46030957.5
+Elapsed: 00:00:00.18
+
+========================================================
+[OPTIMIZACION] Plan de Ejecucion Optimizado (DBMS_XPLAN)
+========================================================
+
+PLAN_TABLE_OUTPUT
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	86pwj2qx1pczq, child number 0
+-------------------------------------
+SELECT /*+ GATHER_PLAN_STATISTICS */	 status,     COUNT(*) AS
+total_count,	 SUM(amount) AS total_amount FROM ledger_transactions
+WHERE transaction_date >= TO_DATE('2026-05-15 00:00:00', 'YYYY-MM-DD
+HH24:MI:SS')   AND transaction_date <  TO_DATE('2026-05-16 00:00:00',
+'YYYY-MM-DD HH24:MI:SS')   AND status = 'COMPLETED' GROUP BY status
+
+Plan hash value: 4122225143
+
+-----------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation	     | Name		     | Starts | E-Rows |E-Bytes| Cost (%CPU)| A-Rows |	 A-Time   | Buffers |
+-----------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |			     |	    1 |        |       |    69 (100)|	   1 |00:00:00.01 |	 67 |
+|   1 |  SORT GROUP BY NOSORT|			     |	    1 |   3421 | 88946 |    69	 (0)|	   1 |00:00:00.01 |	 67 |
+|*  2 |   INDEX RANGE SCAN   | IDX_LEDGER_PERF_COVER |	    1 |   3421 | 88946 |    69	 (0)|  12372 |00:00:00.01 |	 67 |
+-----------------------------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("TRANSACTION_DATE">=TIMESTAMP' 2026-05-15 00:00:00' AND "STATUS"='COMPLETED' AND
+	      "TRANSACTION_DATE"<TIMESTAMP' 2026-05-16 00:00:00')
+       filter("STATUS"='COMPLETED')
+
+Elapsed: 00:00:00.29
