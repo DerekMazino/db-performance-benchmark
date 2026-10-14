@@ -1,0 +1,59 @@
+Elapsed: 00:00:00.01
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.04
+========================================================
+[BASELINE] Reporte analitico sobre tabla monolitica (sin particionar)
+========================================================
+
+TRANSACTION_TYPE     STATUS		    TOTAL_TX TOTAL_AMOUNT AVG_AMOUNT
+-------------------- -------------------- ---------- ------------ ----------
+CREDIT		     COMPLETED		       96575	362025899 3748.65026
+CREDIT		     FAILED			 313   1196489.48  3822.6501
+CREDIT		     FLAGGED_FRAUD		   4	 16573.87  4143.4675
+CREDIT		     PENDING			9103   33900911.5 3724.14715
+DEBIT		     COMPLETED		       97247	364839828 3751.68208
+DEBIT		     FAILED			 319   1227106.87    3846.73
+DEBIT		     FLAGGED_FRAUD		   2	  3544.67   1772.335
+DEBIT		     PENDING			9178   34261868.3 3733.04296
+TRANSFER_IN	     COMPLETED		       97174	363992080 3745.77644
+TRANSFER_IN	     FAILED			 321   1276645.42 3977.08854
+TRANSFER_IN	     FLAGGED_FRAUD		  10	 31428.13   3142.813
+TRANSFER_IN	     PENDING			9106	 34320988 3769.05205
+TRANSFER_OUT	     COMPLETED		       96168	358811870 3731.09423
+TRANSFER_OUT	     FAILED			 329   1256479.92  3819.0879
+TRANSFER_OUT	     FLAGGED_FRAUD		   2	 10178.37   5089.185
+TRANSFER_OUT	     PENDING			9178   34407539.6 3748.91475
+Elapsed: 00:00:11.15
+
+========================================================
+[BASELINE] Plan de Ejecucion (DBMS_XPLAN)
+========================================================
+
+PLAN_TABLE_OUTPUT
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	28tvd6bv54yu8, child number 0
+-------------------------------------
+SELECT /*+ GATHER_PLAN_STATISTICS MONITOR */	 transaction_type,
+status,     COUNT(*) AS total_tx,     SUM(amount) AS total_amount,
+AVG(amount) AS avg_amount FROM ledger_transactions WHERE
+transaction_date >= TO_DATE('2026-01-01 00:00:00', 'YYYY-MM-DD
+HH24:MI:SS')   AND transaction_date <  TO_DATE('2026-02-01 00:00:00',
+'YYYY-MM-DD HH24:MI:SS') GROUP BY transaction_type, status ORDER BY
+transaction_type, status
+
+Plan hash value: 1768103984
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation	   | Name		 | Starts | E-Rows | Cost (%CPU)| A-Rows |   A-Time   | Buffers | Reads  |  OMem |  1Mem | Used-Mem |
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |			 |	1 |	   | 43695 (100)|     16 |00:00:11.01 |     170K|    157K|	 |	 |	    |
+|   1 |  SORT GROUP BY	   |			 |	1 |	12 | 43695   (1)|     16 |00:00:11.01 |     170K|    157K|  2048 |  2048 | 2048  (0)|
+|*  2 |   TABLE ACCESS FULL| LEDGER_TRANSACTIONS |	1 |    424K| 43687   (1)|    425K|00:00:10.56 |     170K|    157K|	 |	 |	    |
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter(("TRANSACTION_DATE">=TIMESTAMP' 2026-01-01 00:00:00' AND "TRANSACTION_DATE"<TIMESTAMP' 2026-02-01 00:00:00'))
+
+Elapsed: 00:00:00.51
