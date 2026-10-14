@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/free:latest
+    platform: linux/amd64 # Garantiza compatibilidad transparente en macOS (Rosetta 2 en Apple Silicon o nativo Intel)
+    container_name: oracle-23ai-benchmark
+    ports:
+      - "1521:1521"
+      - "5500:5500" # Oracle Enterprise Manager Database Express (si aplica)
+    environment:
+      - ORACLE_PWD=Benchmark2026!
+      - ORACLE_CHARACTERSET=AL32UTF8
+    shm_size: 2g # Memoria compartida adecuada para evitar cuellos de botella en SGA/PGA
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+volumes:
+  oracle-data:
+    driver: local
