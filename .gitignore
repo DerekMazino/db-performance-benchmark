@@ -1,0 +1,33 @@
+# Operating System files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Antigravity CLI, Agents, Skills & SDD Specs (local only)
+.agents/
+.antigravity/
+.agy/
+skills/
+specs/
+*.agent.json
+*.skill.json
+
+# Docker and Database runtime
+docker/data/
+*.rdb
+*.log
+*.trc
+
+# Environment & credentials
+.env
+*.key
+*.pem
+
+# Python & Telemetry virtual environments / cache
+__pycache__/
+*.py[cod]
+.venv/
+env/
+dist/
+build/
