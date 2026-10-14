@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/free:latest
+    platform: linux/amd64
+    container_name: oracle-23ai-benchmark
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PWD=Benchmark2026!
+      - ORACLE_CHARACTERSET=AL32UTF8
+    shm_size: 2g
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./init:/opt/oracle/scripts/setup
+    restart: unless-stopped
+
+volumes:
+  oracle-data:
+    driver: local

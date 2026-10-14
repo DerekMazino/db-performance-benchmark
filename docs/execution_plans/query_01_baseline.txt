@@ -1,0 +1,42 @@
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.01
+========================================================
+[BASELINE] Ejecutando consulta con antipatron TRUNC()...
+========================================================
+
+STATUS	  TOTAL_COUNT TOTAL_AMOUNT
+--------- ----------- ------------
+COMPLETED	12372	46030957.5
+Elapsed: 00:00:13.99
+
+========================================================
+[BASELINE] Plan de Ejecucion Real (DBMS_XPLAN)
+========================================================
+
+PLAN_TABLE_OUTPUT
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	ffw7zzkknhzfk, child number 0
+-------------------------------------
+SELECT /*+ GATHER_PLAN_STATISTICS */	 status,     COUNT(*) AS
+total_count,	 SUM(amount) AS total_amount FROM ledger_transactions
+WHERE TRUNC(transaction_date) = TO_DATE('2026-05-15', 'YYYY-MM-DD')
+AND status = 'COMPLETED' GROUP BY status
+
+Plan hash value: 3466196716
+
+------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation	     | Name		   | Starts | E-Rows |E-Bytes| Cost (%CPU)| A-Rows |   A-Time	| Buffers | Reads  |
+------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |			   |	  1 |	     |	     | 43749 (100)|	 1 |00:00:13.64 |     157K|    157K|
+|   1 |  SORT GROUP BY NOSORT|			   |	  1 |  25006 |	 634K| 43749   (1)|	 1 |00:00:13.64 |     157K|    157K|
+|*  2 |   TABLE ACCESS FULL  | LEDGER_TRANSACTIONS |	  1 |  25006 |	 634K| 43749   (1)|  12372 |00:00:13.60 |     157K|    157K|
+------------------------------------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter(("STATUS"='COMPLETED' AND TRUNC(INTERNAL_FUNCTION("TRANSACTION_DATE"))=TO_DATE(' 2026-05-15 00:00:00',
+	      'syyyy-mm-dd hh24:mi:ss')))
+
+Elapsed: 00:00:01.08

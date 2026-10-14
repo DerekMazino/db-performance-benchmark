@@ -1,0 +1,10 @@
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.00
+========================================================
+[OPTIMIZADO] Iniciando procesamiento batch con BULK COLLECT y FORALL
+========================================================
+--- Resumen Optimizado ---
+Procesados exitosamente : 99975
+Errores capturados	: 0
+Tiempo Total de CPU	: 9.005158 segundos
+Elapsed: 00:00:09.07

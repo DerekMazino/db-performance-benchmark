@@ -1,0 +1,55 @@
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.01
+Elapsed: 00:00:00.00
+========================================================
+[OPTIMIZACION] Reporte analitico con PARTITION PRUNING
+========================================================
+
+TRANSACTION_TYPE     STATUS		    TOTAL_TX TOTAL_AMOUNT AVG_AMOUNT
+-------------------- -------------------- ---------- ------------ ----------
+CREDIT		     COMPLETED		      193150	724051799 3748.65026
+CREDIT		     FAILED			 626   2392978.96  3822.6501
+CREDIT		     FLAGGED_FRAUD		   8	 33147.74  4143.4675
+CREDIT		     PENDING		       18206	 67801823 3724.14715
+DEBIT		     COMPLETED		      194494	729679655 3751.68208
+DEBIT		     FAILED			 638   2454213.74    3846.73
+DEBIT		     FLAGGED_FRAUD		   4	  7089.34   1772.335
+DEBIT		     PENDING		       18356   68523736.6 3733.04296
+TRANSFER_IN	     COMPLETED		      194348	727984159 3745.77644
+TRANSFER_IN	     FAILED			 642   2553290.84 3977.08854
+TRANSFER_IN	     FLAGGED_FRAUD		  20	 62856.26   3142.813
+TRANSFER_IN	     PENDING		       18212	 68641976 3769.05205
+TRANSFER_OUT	     COMPLETED		      192336	717623740 3731.09423
+TRANSFER_OUT	     FAILED			 658   2512959.84  3819.0879
+TRANSFER_OUT	     FLAGGED_FRAUD		   4	 20356.74   5089.185
+TRANSFER_OUT	     PENDING		       18356   68815079.2 3748.91475
+Elapsed: 00:00:01.47
+
+========================================================
+[OPTIMIZACION] Plan de Ejecucion con Pstart/Pstop
+========================================================
+
+PLAN_TABLE_OUTPUT
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	17qb0njwpcy9p, child number 0
+-------------------------------------
+SELECT /*+ GATHER_PLAN_STATISTICS MONITOR */	 transaction_type,
+status,     COUNT(*) AS total_tx,     SUM(amount) AS total_amount,
+AVG(amount) AS avg_amount FROM ledger_transactions_part WHERE
+transaction_date >= TO_DATE('2026-01-01 00:00:00', 'YYYY-MM-DD
+HH24:MI:SS')   AND transaction_date <  TO_DATE('2026-02-01 00:00:00',
+'YYYY-MM-DD HH24:MI:SS') GROUP BY transaction_type, status ORDER BY
+transaction_type, status
+
+Plan hash value: 373668909
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation		| Name			   | Starts | E-Rows | Cost (%CPU)| Pstart| Pstop | A-Rows |   A-Time	| Buffers | Reads  |  OMem |  1Mem | Used-Mem |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	|			   |	  1 |	     |	4078 (100)|	  |	  |	16 |00:00:01.43 |   14812 |  14809 |	   |	   |	      |
+|   1 |  SORT GROUP BY		|			   |	  1 |	  12 |	4078   (1)|	  |	  |	16 |00:00:01.43 |   14812 |  14809 |  2048 |  2048 | 2048  (0)|
+|   2 |   PARTITION RANGE SINGLE|			   |	  1 |	 850K|	4061   (1)|    14 |    14 |    850K|00:00:01.12 |   14812 |  14809 |	   |	   |	      |
+|   3 |    TABLE ACCESS FULL	| LEDGER_TRANSACTIONS_PART |	  1 |	 850K|	4061   (1)|    14 |    14 |    850K|00:00:01.12 |   14812 |  14809 |	   |	   |	      |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Elapsed: 00:00:00.15
