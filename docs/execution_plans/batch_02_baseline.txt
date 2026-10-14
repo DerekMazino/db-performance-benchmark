@@ -1,0 +1,10 @@
+Elapsed: 00:00:00.01
+Elapsed: 00:00:00.00
+========================================================
+[BASELINE] Iniciando procesamiento fila a fila (100k registros)
+========================================================
+--- Resumen Baseline ---
+Procesados exitosamente : 99975
+Errores capturados	: 25
+Tiempo Total de CPU	: 21.510701 segundos
+Elapsed: 00:00:21.53
